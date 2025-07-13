@@ -1,0 +1,39 @@
+[package]
+name = "speed-test"
+version = "0.1.0"
+authors = ["Samuel Colvin <s@muelcolvin.com>"]
+edition = "2018"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+#default = ["wee_alloc", "no_std"]
+#default = ["wee_alloc", "simple_replace"]
+#default = ["simple_replace"]
+#default = ["wee_alloc", "regex"]
+default = ["wee_alloc", "tera"]
+
+#no_std = []
+simple_replace = []
+
+[dependencies]
+cfg-if = "0.1.2"
+wasm-bindgen = "0.2"
+wee_alloc = { version = "0.4.2", optional = true }
+
+# switch between these to change size of the module with the regex feature
+#regex = { version = "1", optional = true }
+regex = { version = "1", optional = true, default-features = false, features = ["std"] }
+
+# switch between these to change size of the module with the tera feature
+tera = { version = "1", optional = true }
+#tera = { version = "1", optional = true, default-features = false }
+
+[profile.release]
+# Tell `rustc` to optimize for small code size.
+opt-level = "z"
+# has a small but notiable effect on size:
+lto = true
+codegen-units = 1
+
